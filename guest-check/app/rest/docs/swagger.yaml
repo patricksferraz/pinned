@@ -1,0 +1,531 @@
+basePath: /api/v1
+definitions:
+  rest.AddGuestCheckItemRequest:
+    properties:
+      code:
+        type: integer
+      discount:
+        type: number
+      name:
+        type: string
+      note:
+        type: string
+      quantity:
+        type: integer
+      tag:
+        type: string
+      unit_price:
+        type: number
+    type: object
+  rest.CancelGuestCheckItemRequest:
+    properties:
+      canceled_reason:
+        type: string
+    type: object
+  rest.CancelGuestCheckRequest:
+    properties:
+      canceled_reason:
+        type: string
+    type: object
+  rest.CreateGuestCheckRequest:
+    properties:
+      guest_id:
+        type: string
+      local:
+        type: string
+      place_id:
+        type: string
+    type: object
+  rest.GuestCheck:
+    properties:
+      canceled_reason:
+        type: string
+      created_at:
+        type: string
+      final_price:
+        type: number
+      guest_id:
+        type: string
+      id:
+        type: string
+      local:
+        type: string
+      place_id:
+        type: string
+      status:
+        type: integer
+      total_discount:
+        type: number
+      total_price:
+        type: number
+      updated_at:
+        type: string
+    type: object
+  rest.GuestCheckItem:
+    properties:
+      canceled_reason:
+        type: string
+      code:
+        type: integer
+      created_at:
+        type: string
+      discount:
+        type: number
+      final_price:
+        type: number
+      guest_check_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      note:
+        type: string
+      quantity:
+        type: integer
+      status:
+        type: integer
+      tag:
+        type: string
+      total_price:
+        type: number
+      unit_price:
+        type: number
+      updated_at:
+        type: string
+    type: object
+  rest.HTTPResponse:
+    properties:
+      msg:
+        example: any message
+        type: string
+    type: object
+  rest.IDResponse:
+    properties:
+      id:
+        type: string
+    type: object
+info:
+  contact:
+    email: contato@coding4u.com.br
+    name: Coding4u
+  description: Swagger API for Guest Check Service.
+  termsOfService: http://swagger.io/terms/
+  title: Guest Check Swagger API
+  version: "1.0"
+paths:
+  /guest-checks:
+    post:
+      consumes:
+      - application/json
+      description: Router for create a new guest check
+      operationId: createGuestCheck
+      parameters:
+      - description: JSON body for create a new guest check
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CreateGuestCheckRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: create a new guest check
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}:
+    get:
+      consumes:
+      - application/json
+      description: Router for find a gust check
+      operationId: findGuestCheck
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.GuestCheck'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: find a gust check
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: Router for cancel a guest check
+      operationId: cancelGuestCheck
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      - description: JSON body for cancel a guest check
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CancelGuestCheckRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: cancel a guest check
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/items:
+    post:
+      consumes:
+      - application/json
+      description: Router for add a guest check item
+      operationId: addGuestCheckItem
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      - description: JSON body for add a new guest check item
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.AddGuestCheckItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: add a guest check item
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/items/{guest_check_item_id}:
+    get:
+      consumes:
+      - application/json
+      description: Router for find a guest check item
+      operationId: findGuestCheckItem
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      - description: Guest check item ID
+        in: path
+        name: guest_check_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.GuestCheckItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: find a guest check item
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/items/{guest_check_item_id}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: Router for cancel a guest check item
+      operationId: cancelGuestCheckItem
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      - description: Guest check item ID
+        in: path
+        name: guest_check_item_id
+        required: true
+        type: string
+      - description: JSON body for cancel a guest check item
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CancelGuestCheckItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: cancel a guest check item
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/items/{guest_check_item_id}/deliver:
+    post:
+      consumes:
+      - application/json
+      description: Router for deliver a guest check item
+      operationId: deliverGuestCheckItem
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      - description: Guest check item ID
+        in: path
+        name: guest_check_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: deliver a guest check item
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/items/{guest_check_item_id}/forward:
+    post:
+      consumes:
+      - application/json
+      description: Router for forward a guest check item
+      operationId: forwardGuestCheckItem
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      - description: Guest check item ID
+        in: path
+        name: guest_check_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: forward a guest check item
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/items/{guest_check_item_id}/prepare:
+    post:
+      consumes:
+      - application/json
+      description: Router for prepare a guest check item
+      operationId: prepareGuestCheckItem
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      - description: Guest check item ID
+        in: path
+        name: guest_check_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: prepare a guest check item
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/items/{guest_check_item_id}/ready:
+    post:
+      consumes:
+      - application/json
+      description: Router for ready a guest check item
+      operationId: readyGuestCheckItem
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      - description: Guest check item ID
+        in: path
+        name: guest_check_item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: ready a guest check item
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/pay:
+    post:
+      consumes:
+      - application/json
+      description: Router for pay a guest check
+      operationId: payGuestCheck
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: pay a guest check
+      tags:
+      - Guest Check
+  /guest-checks/{guest_check_id}/wait-payment:
+    post:
+      consumes:
+      - application/json
+      description: Router for wait payment a guest check
+      operationId: waitPaymentGuestCheck
+      parameters:
+      - description: Guest check ID
+        in: path
+        name: guest_check_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: wait payment a guest check
+      tags:
+      - Guest Check
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

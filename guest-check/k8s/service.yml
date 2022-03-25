@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: guest-check
+spec:
+  type: ClusterIP
+  selector:
+    app: guest-check
+  ports:
+  - name: rest
+    port: 8080
+    targetPort: 8080

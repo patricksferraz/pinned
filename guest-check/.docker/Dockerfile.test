@@ -1,0 +1,12 @@
+FROM golang:1.17-alpine
+
+WORKDIR /test
+
+COPY . .
+
+RUN set -ex &&\
+    apk add --no-progress --no-cache \
+    gcc \
+    musl-dev
+
+RUN go test -v -tags musl -cover ./...

@@ -1,0 +1,18 @@
+package topic
+
+const (
+	NEW_GUEST_CHECK  string = "NEW_GUEST_CHECK"
+	OPEN_GUEST_CHECK string = "OPEN_GUEST_CHECK"
+
+	NEW_GUEST     string = "NEW_GUEST"
+	NEW_PLACE     string = "NEW_PLACE"
+	NEW_ATTENDANT string = "NEW_ATTENDANT"
+)
+
+var CONSUMER_TOPICS = []string{
+	OPEN_GUEST_CHECK,
+
+	NEW_GUEST,
+	NEW_PLACE,
+	NEW_ATTENDANT,
+}
