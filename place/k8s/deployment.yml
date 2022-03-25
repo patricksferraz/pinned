@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: place
+  labels:
+    app: place
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: place
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: place
+        version: v1
+    spec:
+      containers:
+      - name: place
+        image: ghcr.io/patricksferraz/place
+        ports:
+        - name: rest
+          containerPort: 8080
+        envFrom:
+          - secretRef:
+              name: place-secret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+
+      imagePullSecrets:
+          - name: regsecret
