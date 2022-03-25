@@ -1,0 +1,252 @@
+basePath: /api/v1
+definitions:
+  rest.AddItemTagRequest:
+    properties:
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  rest.CreateItemRequest:
+    properties:
+      description:
+        type: string
+      discount:
+        type: number
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  rest.CreateMenuRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  rest.HTTPResponse:
+    properties:
+      msg:
+        example: any message
+        type: string
+    type: object
+  rest.IDResponse:
+    properties:
+      id:
+        type: string
+    type: object
+  rest.Item:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      discount:
+        type: number
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      updated_at:
+        type: string
+    type: object
+  rest.Menu:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+info:
+  contact:
+    email: contato@coding4u.com.br
+    name: Coding4u
+  description: Swagger API for Menu Service.
+  termsOfService: http://swagger.io/terms/
+  title: Menu Swagger API
+  version: "1.0"
+paths:
+  /menus:
+    post:
+      consumes:
+      - application/json
+      description: Router for create a new menu
+      operationId: createMenu
+      parameters:
+      - description: JSON body for create a new menu
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CreateMenuRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: create a new menu
+      tags:
+      - Menu
+  /menus/{menu_id}:
+    get:
+      consumes:
+      - application/json
+      description: Router for find a menu
+      operationId: findMenu
+      parameters:
+      - description: Menu ID
+        in: path
+        name: menu_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.Menu'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: find a menu
+      tags:
+      - Menu
+  /menus/{menu_id}/items:
+    post:
+      consumes:
+      - application/json
+      description: Router for create a new item
+      operationId: createItem
+      parameters:
+      - description: Menu ID
+        in: path
+        name: menu_id
+        required: true
+        type: string
+      - description: JSON body for create a new item
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CreateItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: create a new item
+      tags:
+      - Item
+  /menus/{menu_id}/items/{item_id}:
+    get:
+      consumes:
+      - application/json
+      description: Router for find a item
+      operationId: findItem
+      parameters:
+      - description: Menu ID
+        in: path
+        name: menu_id
+        required: true
+        type: string
+      - description: Item ID
+        in: path
+        name: item_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.Item'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: find a item
+      tags:
+      - Item
+  /menus/{menu_id}/items/{item_id}/tag:
+    put:
+      consumes:
+      - application/json
+      description: Router for add a item tag
+      operationId: addItemTag
+      parameters:
+      - description: Menu ID
+        in: path
+        name: menu_id
+        required: true
+        type: string
+      - description: Item ID
+        in: path
+        name: item_id
+        required: true
+        type: string
+      - description: JSON body for add a new item tag
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.AddItemTagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: add a item tag
+      tags:
+      - Item
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
