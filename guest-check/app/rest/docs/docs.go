@@ -20,8 +20,8 @@ var doc = `{
         "title": "{{.Title}}",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
-            "name": "Coding4u",
-            "email": "contato@coding4u.com.br"
+            "name": "Patrick Ferraz",
+            "email": "patrick.ferraz@outlook.com"
         },
         "version": "{{.Version}}"
     },
@@ -659,8 +659,11 @@ var doc = `{
                 "quantity": {
                     "type": "integer"
                 },
-                "tag": {
-                    "type": "string"
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "unit_price": {
                     "type": "number"
