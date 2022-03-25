@@ -1,0 +1,109 @@
+basePath: /api/v1
+definitions:
+  rest.CreateGuestRequest:
+    properties:
+      doc:
+        type: string
+      name:
+        type: string
+    type: object
+  rest.Guest:
+    properties:
+      created_at:
+        type: string
+      doc:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  rest.HTTPResponse:
+    properties:
+      msg:
+        example: any message
+        type: string
+    type: object
+  rest.IDResponse:
+    properties:
+      id:
+        type: string
+    type: object
+info:
+  contact:
+    email: contato@coding4u.com.br
+    name: Coding4u
+  description: Swagger API for Guest Service.
+  termsOfService: http://swagger.io/terms/
+  title: Guest Swagger API
+  version: "1.0"
+paths:
+  /guests:
+    post:
+      consumes:
+      - application/json
+      description: Router for create a new guest
+      operationId: createGuest
+      parameters:
+      - description: JSON body for create a new guest
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CreateGuestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: create a new guest
+      tags:
+      - Guest
+  /guests/{guest_id}:
+    get:
+      consumes:
+      - application/json
+      description: Router for find a guest
+      operationId: findGuest
+      parameters:
+      - description: Guest ID
+        in: path
+        name: guest_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.Guest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: find a gust
+      tags:
+      - Guest
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

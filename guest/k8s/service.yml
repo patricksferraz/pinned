@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: guest
+  labels:
+    app: guest
+    service: guest
+spec:
+  type: ClusterIP
+  selector:
+    app: guest
+  ports:
+  - name: rest
+    port: 8080
+    targetPort: 8080
