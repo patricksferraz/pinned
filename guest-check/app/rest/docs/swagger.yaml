@@ -12,8 +12,10 @@ definitions:
         type: string
       quantity:
         type: integer
-      tag:
-        type: string
+      tags:
+        items:
+          type: string
+        type: array
       unit_price:
         type: number
     type: object
@@ -107,8 +109,8 @@ definitions:
     type: object
 info:
   contact:
-    email: contato@coding4u.com.br
-    name: Coding4u
+    email: patrick.ferraz@outlook.com
+    name: Patrick Ferraz
   description: Swagger API for Guest Check Service.
   termsOfService: http://swagger.io/terms/
   title: Guest Check Swagger API

@@ -5,8 +5,8 @@
         "title": "Guest Check Swagger API",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
-            "name": "Coding4u",
-            "email": "contato@coding4u.com.br"
+            "name": "Patrick Ferraz",
+            "email": "patrick.ferraz@outlook.com"
         },
         "version": "1.0"
     },
@@ -643,8 +643,11 @@
                 "quantity": {
                     "type": "integer"
                 },
-                "tag": {
-                    "type": "string"
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "unit_price": {
                     "type": "number"
