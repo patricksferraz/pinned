@@ -64,8 +64,8 @@ definitions:
     type: object
 info:
   contact:
-    email: contato@coding4u.com.br
-    name: Coding4u
+    email: patrick.ferraz@outlook.com
+    name: Patrick Ferraz
   description: Swagger API for Menu Service.
   termsOfService: http://swagger.io/terms/
   title: Menu Swagger API
