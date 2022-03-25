@@ -1,0 +1,105 @@
+basePath: /api/v1
+definitions:
+  rest.CreatePlaceRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  rest.HTTPResponse:
+    properties:
+      msg:
+        example: any message
+        type: string
+    type: object
+  rest.IDResponse:
+    properties:
+      id:
+        type: string
+    type: object
+  rest.Place:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+info:
+  contact:
+    email: contato@coding4u.com.br
+    name: Coding4u
+  description: Swagger API for Place Service.
+  termsOfService: http://swagger.io/terms/
+  title: Place Swagger API
+  version: "1.0"
+paths:
+  /places:
+    post:
+      consumes:
+      - application/json
+      description: Router for create a new place
+      operationId: createPlace
+      parameters:
+      - description: JSON body for create a new place
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CreatePlaceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: create a new place
+      tags:
+      - Place
+  /places/{place_id}:
+    get:
+      consumes:
+      - application/json
+      description: Router for find a place
+      operationId: findPlace
+      parameters:
+      - description: Place ID
+        in: path
+        name: place_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.Place'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/rest.HTTPResponse'
+      summary: find a place
+      tags:
+      - Place
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
