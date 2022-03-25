@@ -1,6 +1,6 @@
 module github.com/patricksferraz/attendant
 
-go 1.17
+go 1.18
 
 require (
 	github.com/Netflix/go-env v0.0.0-20210215222557-e437a7e7f9fb
@@ -14,7 +14,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/cobra v1.3.0
 	github.com/swaggo/fiber-swagger v1.2.0
-	github.com/swaggo/swag v1.7.9
+	github.com/swaggo/swag v1.8.0
 	gorm.io/driver/sqlite v1.2.6
 )
 
