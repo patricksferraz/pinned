@@ -19,8 +19,8 @@ import (
 // @description Swagger API for Place Service.
 // @termsOfService http://swagger.io/terms/
 
-// @contact.name Coding4u
-// @contact.email contato@coding4u.com.br
+// @contact.name Patrick Ferraz
+// @contact.email patrick.ferraz@outlook.com
 
 // @BasePath /api/v1
 // @query.collection.format multi
