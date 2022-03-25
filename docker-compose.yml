@@ -1,0 +1,196 @@
+version: '3.4'
+
+services:
+  menu:
+    build:
+      context: ./menu/
+      dockerfile: .docker/Dockerfile
+    restart: always
+    command: ["go", "run", "main.go", "all"]
+    environment:
+      ENV: dev
+    ports:
+      - $MENU_REST_PORT:8080
+    volumes:
+      - ./menu/:/go/src/
+    depends_on:
+      - postgres
+    networks:
+      - pinned
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'
+
+  guest:
+    build:
+      context: ./guest/
+      dockerfile: .docker/Dockerfile
+    restart: always
+    command: ["go", "run", "main.go", "all"]
+    environment:
+      ENV: dev
+    ports:
+      - $GUEST_REST_PORT:8080
+    volumes:
+      - ./guest/:/go/src/
+    depends_on:
+      - postgres
+    networks:
+      - pinned
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'
+
+  attendant:
+    build:
+      context: ./attendant/
+      dockerfile: .docker/Dockerfile
+    restart: always
+    command: ["go", "run", "main.go", "all"]
+    environment:
+      ENV: dev
+    ports:
+      - $ATTENDANT_REST_PORT:8080
+    volumes:
+      - ./attendant/:/go/src/
+    depends_on:
+      - postgres
+    networks:
+      - pinned
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'
+
+  place:
+    build:
+      context: ./place/
+      dockerfile: .docker/Dockerfile
+    restart: always
+    command: ["go", "run", "main.go", "all"]
+    environment:
+      ENV: dev
+    ports:
+      - $PLACE_REST_PORT:8080
+    volumes:
+      - ./place/:/go/src/
+    depends_on:
+      - postgres
+    networks:
+      - pinned
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'
+
+  guest-check:
+    build:
+      context: ./guest-check/
+      dockerfile: .docker/Dockerfile
+    restart: always
+    command: ["go", "run", "main.go", "all"]
+    environment:
+      ENV: dev
+    ports:
+      - $GUEST_CHECK_REST_PORT:8080
+    volumes:
+      - ./guest-check/:/go/src/
+    depends_on:
+      - postgres
+    networks:
+      - pinned
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'
+
+  postgres:
+    image: postgres:9.4
+    restart: always
+    tty: true
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_USER: $POSTGRES_USER
+      # POSTGRES_DB: $POSTGRES_DB
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - $DB_PORT:5432
+    networks:
+      - pinned
+
+  pgadmin:
+    image: adminer:4.8.1
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    networks:
+      - pinned
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - pinned
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+      - 9094:9094
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://:9092,OUTSIDE://:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://host.docker.internal:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+    networks:
+      - pinned
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'
+
+  kafka-topics-generator:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - kafka
+    command: >
+      bash -c
+        "sleep 5s &&
+        kafka-topics --create --topic=NEW_GUEST_CHECK_ITEM --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=CANCEL_GUEST_CHECK_ITEM --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=PREPARE_GUEST_CHECK_ITEM --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=READY_GUEST_CHECK_ITEM --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=FORWARD_GUEST_CHECK_ITEM --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=DELIVER_GUEST_CHECK_ITEM --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=NEW_GUEST_CHECK --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=OPEN_GUEST_CHECK --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=WAIT_PAYMENT_GUEST_CHECK --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=CANCEL_GUEST_CHECK --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=PAY_GUEST_CHECK --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=NEW_GUEST --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=NEW_PLACE --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=NEW_ATTENDANT --if-not-exists --bootstrap-server=kafka:9092
+        "
+    networks:
+      - pinned
+
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:6.0.1
+    hostname: control-center
+    depends_on:
+      - kafka
+    ports:
+      - 9021:9021
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka:9092
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      PORT: 9021
+    networks:
+      - pinned
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  pinned:
+    driver: bridge
